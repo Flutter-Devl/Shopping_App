@@ -13,22 +13,22 @@ class CartScreen extends StatelessWidget {
     final cart = Provider.of<Cart>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your Cart'),
+        title: Text('Your Cart'),
       ),
       body: Column(
         children: <Widget>[
           Card(
-            margin: const EdgeInsets.all(15),
+            margin: EdgeInsets.all(15),
             child: Padding(
-              padding: const EdgeInsets.all(8),
+              padding: EdgeInsets.all(8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  const Text(
+                  Text(
                     'Total',
                     style: TextStyle(fontSize: 20),
                   ),
-                  const Spacer(),
+                  Spacer(),
                   Chip(
                     label: Text(
                       '\$${cart.totalAmount.toStringAsFixed(2)}',
@@ -43,17 +43,17 @@ class CartScreen extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Expanded(
             child: ListView.builder(
               itemCount: cart.items.length,
               itemBuilder: (ctx, i) => CartItem(
-                cart.items.values.toList()[i].id,
-                cart.items.keys.toList()[i],
-                cart.items.values.toList()[i].price,
-                cart.items.values.toList()[i].quantity,
-                cart.items.values.toList()[i].title,
-              ),
+                    cart.items.values.toList()[i].id,
+                    cart.items.keys.toList()[i],
+                    cart.items.values.toList()[i].price,
+                    cart.items.values.toList()[i].quantity,
+                    cart.items.values.toList()[i].title,
+                  ),
             ),
           )
         ],
@@ -80,23 +80,23 @@ class _OrderButtonState extends State<OrderButton> {
   @override
   Widget build(BuildContext context) {
     return FlatButton(
+      child: _isLoading ? CircularProgressIndicator() : Text('ORDER NOW'),
       onPressed: (widget.cart.totalAmount <= 0 || _isLoading)
           ? null
           : () async {
-        setState(() {
-          _isLoading = true;
-        });
-        await Provider.of<Orders>(context, listen: false).addOrder(
-          widget.cart.items.values.toList(),
-          widget.cart.totalAmount,
-        );
-        setState(() {
-          _isLoading = false;
-        });
-        widget.cart.clear();
-      },
+              setState(() {
+                _isLoading = true;
+              });
+              await Provider.of<Orders>(context, listen: false).addOrder(
+                widget.cart.items.values.toList(),
+                widget.cart.totalAmount,
+              );
+              setState(() {
+                _isLoading = false;
+              });
+              widget.cart.clear();
+            },
       textColor: Theme.of(context).primaryColor,
-      child: _isLoading ? const CircularProgressIndicator() : const Text('ORDER NOW'),
     );
   }
 }
